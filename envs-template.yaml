@@ -1,0 +1,54 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
+kind: Template
+metadata:
+  name: envs-template
+  title: Environment Tests
+  description: Testing environment variables
+spec:
+  owner: user:default/skyem
+  type: service
+  parameters:
+    - title: Test envs
+      required:
+        - env
+      properties:
+        env:
+          title: Environment
+          type: string
+          description: Environment to use
+          default: dev
+        repoName:
+          title: Repo Name
+          type: string
+          description: Name of the repo
+          default: test-repo
+          maxLength: 30
+        envName:
+          title: Environment Variable Name
+          type: string
+          description: Name of the environment variable
+          default: test-env-var
+          maxLength: 30
+        envValue:
+          title: Environment Variable Value
+          type: string
+          description: Value of the environment variable
+          default: test-env-value
+          maxLength: 30
+  steps:
+    - id: setEnv
+      name: Setup Environment
+      action: github:environment:create
+      input:
+        repoUrl: github.com?repo=${{ parameters.repoName }}&owner=skyem
+        name: ${{ parameters.env }}
+        environmentVariables:
+          var1: ${{ parameters.envValue }}
+        secrets:
+          secret1: ${{ parameters.envValue }}
+  output:
+    links:
+      - title: "Repository: skyem/${{ parameters.repoName }}"
+        icon: github
+        url: https://github.com/skyem/${{ parameters.repoName }}

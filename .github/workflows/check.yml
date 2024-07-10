@@ -16,3 +16,5 @@ jobs:
           echo "Code is good!" 
           RESULT=${{ secrets.SECRET1 == 'test-env-value' }}
           echo "Secret is valid: $RESULT"
+
+# test
